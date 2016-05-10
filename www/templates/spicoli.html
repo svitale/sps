@@ -1,0 +1,14 @@
+{{#model}}
+    <div class="row spicoli">
+<form>
+        <div class="col-xs-2">
+            <input type="text"  name="id_subject" value="{{attributes.id_subject}}" class="form-control" placeholder="subject id">
+       </div>
+       <div class="col-xs-1">
+           <input type="text" name="num_tubes" value="{{attributes.num_tubes}}" class="form-control" placeholder="#">
+      </div>
+<button class="btn button" value="remove" id="{{model.attributes.id}}" name="remove">remove</button>
+<button class="btn button" value="remove" id="{{model.attributes.id}}" name="echo">echo</button>
+</form>
+   </div>
+{{/model}}

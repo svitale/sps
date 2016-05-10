@@ -1,0 +1,172 @@
+<div class="selector"  id="{{spot_id}}" style="height: 100%;overflow: scroll"></div>
+<script type = "text/javascript">
+	handlers['{{spot_id}}'] = function(view)  {
+  var results  = view.model.get('results');
+
+var colnames = ["objectName","measuredValue","interpretedValue","interpretedCv"];
+
+//override the default view for the expand button
+var ExpandCell = Backbone.View.extend({
+  initialize: function() {
+    this.listenTo(this.model, "select", this.select);
+    this.listenTo(this.model, "deselect", this.deselect);
+    this.render();
+  },
+  render: function() {
+    //set the expand button
+    this.$el.html('<button class="btn" id="expand"><span class="glyphicon glyphicon-chevron-down"></span></button>');
+    return this;
+  },
+  events: {
+    "click .btn": "buttonClick"
+  },
+  select: function() {
+    //toggle the expand button
+    results.each(function(result){result.trigger('deselect')})
+    this.expanded = true;
+    this.$el.html('<button class="btn" id="hide"><span class="glyphicon glyphicon-chevron-up"></span></button>');
+  },
+  deselect: function() {
+    //toggle the expand button
+    this.expanded = false;
+    this.$el.html('<button class="btn" id="expand"><span class="glyphicon glyphicon-chevron-down"></span></button>');
+  },
+  buttonClick: function () {
+    this.expanded = !this.expanded;
+    if(this.expanded) {
+         this.model.trigger("select", this.model, this.expanded);
+    } else {
+         this.model.trigger("deselect", this.model, this.expanded);
+    }
+  }
+});
+
+var ExpandableRow = Backgrid.Row.extend({
+  highlightColor: "lightYellow",
+  lowlightColor: "white",
+  initialize: function () {
+    ExpandableRow.__super__.initialize.apply(this,arguments);
+    this.listenTo(this.model, "select", this.rowSelect);
+    this.listenTo(this.model, "deselect", this.rowDeselect);
+    this.listenTo(this.model, "focusin", this.rowFocus);
+    this.listenTo(this.model, "focusout", this.rowLostFocus);
+  },
+  render: function () {
+    ExpandableRow.__super__.render.apply(this, arguments);
+    this.el.style.backgroundColor = this.lowlightColor;
+    return this;
+  },
+  rowSelect: function() {
+    view = this;
+    results.every(function (result) {
+	if(view.model!=result) {
+	    result.trigger('deselect');
+	}
+    }); 
+    Templates.getTemplate('grid_detail', function(err, template) {
+         if (err) {
+             new ErrorView({
+                 el: view.$el,
+                 message: 'Error loading template file'
+             }); 
+             return;
+         } else {   
+	     var detail = view.$el.after(template(view));
+		_.delay(function(){ jQuery('#{{spot_id}}').scrollTo(view.el,200  )}, 200);
+	 }
+         }); 
+
+    this.el.style.backgroundColor = this.highlightColor;
+  },
+  rowDeselect: function() {
+    var detail_el = this.$el.next();
+    if (detail_el.hasClass('detail')) {
+        detail_el.slideUp(130, function(){
+              detail_el.remove();
+        });
+    }
+    this.el.style.backgroundColor = this.lowlightColor;
+  },
+  rowFocus: function() {
+    this.el.style.backgroundColor = this.highlightColor;
+  },
+  rowLostFocus: function() {
+    this.el.style.backgroundColor = this.lowlightColor;
+  },
+});
+
+
+var columns = [{
+    name: "",
+ //   label: "Expand",
+    cell: ExpandCell,
+    sortable: false,
+    editable: false
+  }, {
+    name: "setIgnore",
+//    label: str.setIgnore,
+    editable: true, 
+    cell: "Boolean"
+  }, {
+    name: "retest",
+//    label: jQuery.i18n.prop('retest'),
+    editable: true, 
+    cell: "Boolean"
+  }, {
+    name: "objectType",
+  //  label: jQuery.i18n.prop('objectType'),
+    editable: true, 
+    cell: "string"
+  }, {
+    name: "objectUuid",
+  //  label: jQuery.i18n.prop('objectUuid'),
+    editable: true, 
+    cell: "string"
+  }, {
+    name: "objectName",
+ //   label: jQuery.i18n.prop('objectName'),
+    editable: true, 
+    cell: "string"
+  }, {
+    name: "plateName",
+ //   label: jQuery.i18n.prop('plateName'),
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "interpretedValue",
+ //   label: jQuery.i18n.prop('interpretedValue'),
+    editable: false, 
+    cell: "number"
+  }, {
+    name: "interpretedCv",
+//    label: jQuery.i18n.prop('interpretedCv'),
+    editable: false, 
+    cell: "number"
+  }, {
+    name: "measuredValue",
+//    label: jQuery.i18n.prop('measuredValue'),
+    editable: false, 
+    cell: "string"
+  },
+];
+// Initialize a new Grid instance
+var grid = new Backgrid.Grid({
+  //row: FocusableRow,
+  row: ExpandableRow,
+  columns: columns,
+  collection: results
+});
+//Sps.grid = grid;
+/*
+var filter = new BackgridFilter({
+  collection: results_collection,
+  fields: ['objectType']
+});
+
+jQuery("#griddy").before(filter.render().el);
+*/
+jQuery("#{{spot_id}}").append(grid.render().el);
+
+
+}
+</script>

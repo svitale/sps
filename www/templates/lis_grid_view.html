@@ -1,0 +1,31 @@
+<div class="row">
+ <table id="table_{{spot_id}}" class="table-condensed table-bordered" cellspacing="0" width="100%">
+       <thead>
+             <tr>
+                <th>Inst.</th>
+                <th>Plate</th>
+                <th>Pos.</th>
+                <th>Type</th>
+                <th>Barcode</th>
+                <th>Assay</th>
+                <th>Value</th>
+                <th>Units</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+ 
+ </table>
+</div>
+<script>
+var handlers = [];
+handlers[{{spot_id}}] = function(view) {
+var data = view.model;
+var dom = 'T<"top">rtp<"bottom">i';
+var fields = 
+            ['id_instrument','name_plate','position_plate',
+             'uqc','id_barcode','id_assay','value','units',
+             'datetime_assay'];
+//var dom='<"top"i>rt<"bottom"flp><"clear">';
+view.renderTable(data,fields,dom);
+}
+</script>

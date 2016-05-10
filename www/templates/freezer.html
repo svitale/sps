@@ -1,0 +1,181 @@
+<div  id="spot_{{spot_id}}">
+</div>
+<script type = "text/javascript">
+handlers['{{spot_id}}'] = function(globalView)  {
+  var fridge = globalView.json;
+  var margin = {top: 1, right: 1, bottom: 1, left: 1},
+    width = {{width}} - margin.left - margin.right,
+    height = {{height}} - margin.top - margin.bottom;
+
+  var spot_name = 'spot_{{spot_id}}';
+  /*describe a rack*/
+  var RackView = Backbone.View.extend({
+    initialize: function(options) {
+      console.log('initializing shelfview');
+      this.svg = d3.select(this.el);
+      this.height = options.height;
+      this.width = options.width;
+      this.x = options.x;
+      this.y = options.y;
+      this.num_boxes = view.model.x * view.model.y;
+      this.boxwidth = Math.round(options.width/this.num_boxes);
+      this.rack_height = this.height - 5;
+      //this.render();
+    },
+   /*send the graphics to the dom*/
+    render: function() {
+      var view = this;
+      var s = view.svg;
+      s.style("fill", "blue");
+      // crude scaling factor for shelves
+      var g = view.svg.selectAll();
+      g.data(view.model.racks).enter()
+       .append("rect")
+       .attr("x", function(rack) { 
+           var x = ((rack.num-1) * view.rack_width);
+           return x;
+       })
+      .attr("y",view.y)
+      .attr("width", this.rack_width-5)
+      .attr("height",this.rack_height-5)
+      .style("fill", "green")
+      .each(function(rack,i) {
+          var rack_el = this; 
+          var x = this.x;
+          var y = this.y;
+           new RackView({el:rack_el,model:rack,x:x,y:y,height:view.rack_height,width:view.rack_width});
+       });
+      },
+  });
+
+  /*describe a shelf*/
+  var ShelfView = Backbone.View.extend({
+    initialize: function(options) {
+      console.log('initializing shelfview');
+      this.svg = d3.select(this.el);
+      this.height = options.height;
+      this.width = options.width;
+      this.x = options.x;
+      this.y = options.y;
+      this.num_racks = view.model.x;
+      this.rack_width = Math.round(options.width/this.num_racks);
+      this.rack_height = this.height - 5;
+      this.render();
+    },
+   /*send the graphics to the dom*/
+    render: function() {
+      var view = this;
+var s = view.svg;
+     s.style("fill", "blue");
+      // crude scaling factor for shelves
+var g = view.svg.selectAll();
+     g.data(view.model.racks).enter()
+       .append("rect")
+       .attr("x", function(rack) { 
+           var x = ((rack.num-1) * view.rack_width);
+           return x;
+       })
+      .attr("y",view.y)
+      .attr("width", this.rack_width-5)
+      .attr("height",this.rack_height-5)
+      .style("fill", "green")
+      .each(function(rack,i) {
+          var rack_el = this; 
+          var x = this.x;
+          var y = this.y;
+         //  new RackView({el:rack_el,model:rack,x:x,y:y,height:view.rack_height,width:view.rack_width});
+       });
+      },
+  });
+
+  /*describe a fridge*/
+  var FridgeView = Backbone.View.extend({
+    initialize: function(options) {
+      console.log('initializing fridgeview');
+      this.width = options.width;
+      this.height = options.height;
+      this.svg = d3.select(this.el);
+      console.log(this);
+     // this.render();
+    },
+
+   /*send the graphics to the dom*/
+    render: function() {
+      view = this;
+      // the "y" dimension on the item object is set to the number of shelves
+      var num_shelves = view.model.y
+      // crude scaling factor for shelves
+      var shelf_height = Math.round(view.height/num_shelves);
+      var shelf_width = view.width;
+      // get our own styling out of the way
+      this.svg.attr("x", 0)
+        .attr("y", 0)
+        .attr("width", view.width)
+        .attr("height", view.height)
+        .attr("class", "freezer")
+        .style("background-color", "white");
+
+     var svg = this.svg;
+      var g = svg.selectAll()
+       .data(view.model.shelves).enter()
+// create group element fro shelf
+       .append("g")
+       .attr("x",10)
+       .attr("y", function(shelf) { 
+         return (shelf.num-1) * shelf_height; 
+       })
+       .attr("width", view.width -10)
+       .attr("height", shelf_height -10)
+       .attr("class", "shelf")
+       .attr("id", function(d) { 
+           return 'g_'+d.id
+       })
+// create rect element for shelf
+       .append("rect")
+       .attr("x",10)
+       //.attr("y",0)
+       .attr("y", function(shelf) { 
+         return (shelf.num-1) * shelf_height; 
+       })
+       .attr("width", view.width -10)
+       .attr("height", shelf_height -10)
+       g.each(function(shelf,i) {
+           var shelf_el = g[0][i].parentNode; 
+           var x = 10
+           var y = (shelf.num-1) * shelf_height
+           new ShelfView({el:shelf_el,model:shelf,x:x,y:y,height:shelf_height,width:shelf_width});
+       })
+      },
+
+
+  });
+
+
+  var SVGView = Backbone.View.extend({
+    initialize: function(options) {
+      // this svg will take up the whole spot
+      var spot_name = options.spot_name;
+      var fridge = options.fridge;
+      console.log('initializing svgview');
+      this.makeFridge(fridge,spot_name);
+    },
+
+    events: {
+//      "click": "makeCircle" 
+    },
+
+     makeFridge: function(model) {
+       // this.d3.append("rect");
+       view = this;
+       view.d3 = d3.select('#'+spot_name);
+       // this rectangle will become a fridge
+       var svg = view.d3.append("svg");
+       new FridgeView({el:svg[0],width: width, height: height, model: model});
+    },
+
+  });
+
+  var svgView = new SVGView({fridge: fridge, spot_name: spot_name, height:height, width:width});
+
+};
+</script>

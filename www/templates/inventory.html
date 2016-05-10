@@ -1,0 +1,74 @@
+<div id="inventory_error"></div>
+<div id="inventory_total"></div>
+<div id="inventory_limit"></div>
+<div class="selector"  id="griddy" style="height: 100%;overflow: scroll"></div>
+<script type = "text/javascript">
+var handlers = [];
+handlers['inventory'] = function(view)  {
+	var model = view.model;
+	var inventory_collection = model.attributes.records;
+jQuery('#inventory_total').html("<div>Matching: "+model.attributes.total + "</div>");
+jQuery('#inventory_limit').html("<div>Limit: "+model.attributes.limit + "</div>");
+jQuery('#inventory_error').html(model.attributes.error);
+var columns = [{
+    name: "id_subject",
+    label: jQuery.i18n.prop('id_subject'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "id_uuid",
+    label: jQuery.i18n.prop('id_uuid'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "id_visit",
+    label: jQuery.i18n.prop('id_visit'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "sample_type",
+    label: jQuery.i18n.prop('sample_type'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "freezer",
+    label: jQuery.i18n.prop('freezer'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "subdiv1",
+    label: jQuery.i18n.prop('subdiv1'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "subdiv2",
+    label: jQuery.i18n.prop('subdiv2'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "subdiv3",
+    label: jQuery.i18n.prop('subdiv3'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "boxBarcode",
+    label: jQuery.i18n.prop('boxBarcode'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "positionName",
+    label: jQuery.i18n.prop('positionName'),
+    editable: false, 
+    cell: "string"
+  }
+];
+// Initialize a new Grid instance
+var grid = new Backgrid.Grid({
+  columns: columns,
+  collection: inventory_collection
+});
+Sps.grid = grid;
+jQuery("#griddy").append(grid.render().el);
+
+}
+</script>

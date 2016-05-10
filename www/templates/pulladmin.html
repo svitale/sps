@@ -1,0 +1,40 @@
+<h3>Pull Admin</h3>
+<div class="row">
+    <div class="row top-buffer">
+    <label class="control-label" for="pull_select">Pull</label>
+    <select class="btn select" name="pull" id="site_select">
+    <option value=""></option>
+    {{#collection.models}}
+      <option name="pull" value="{{attributes.id}}" {{selected}}>{{attributes.name}}</option>
+    {{/collection.models}}
+    </select>
+    <button class="btn" value="new" id="new" name="new">new</button>
+{{#selected}}
+
+    <div class="form-group">
+        <form action="npc.php?action=importspreadsheet&usetemplate=pull&id={{selected.id}}" method="post" enctype="multipart/form-data">
+        <label for="file">Specimin List:</label>
+        <input type="file" name="file" id="file">
+        <p class="help-block">Upload a list of specimins you'd like to find</p>
+        <button class="btn" value="submit" id="submit" name="submit">submit</button>
+        </form>
+        <button class="btn btn-default button" name="echo">echo</button>
+    </div>
+{{/selected}}
+
+
+
+
+ <div class="col-md-8">
+  <table id="example" class="table-condensed table-striped table-bordered" cellspacing="    0" width="100%">
+       <thead>
+             <tr>
+                <th>run</th>
+            </tr>
+        </thead>
+ 
+  </table>
+ </div>
+
+</div>
+

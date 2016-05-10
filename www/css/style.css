@@ -1,0 +1,599 @@
+#loading
+{
+  position:absolute;
+  width:100%;
+  height:100%;
+  z-index:1000;
+  background-color:#fff;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.sidebar-nav {
+  background-color: #bbd8e9;
+}
+
+
+.push-to-bottom {
+  position: absolute;
+  bottom: 5px;
+}
+
+    .cell-title {
+      zfont-weight: bold;
+    }
+
+    .cell-effort-driven {
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+
+    .cell-reorder {
+      cursor: move;
+      background: url("../images/drag-handle.png") no-repeat center center;
+    }
+
+    .cell-selection {
+      border-right-color: silver;
+      border-right-style: solid;
+      background: #f5f5f5;
+      color: gray;
+      text-align: right;
+      font-size: 10px;
+    }
+
+    .slick-row.selected .cell-selection {
+      background-color: transparent; /* show default selected row background */
+    }
+   .slick-header-columns {
+        font-size: 11px;
+    }
+   .slick-cell {
+        font-size: 11px;
+    }
+    .active_object {
+        font-size: 12px;
+	background-color: #d0d0d0;
+    }
+
+
+
+    .recycle-bin {
+      width: 120px;
+      border: 1px solid gray;
+      background: beige;
+      padding: 4px;
+      font-size: 12pt;
+      font-weight: bold;
+      color: black;
+      text-align: center;
+      -moz-border-radius: 10px;
+    }
+
+    .red {
+      background: red;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+.msg
+{
+  font-weight:bold;
+  margin:1em;
+}
+.assayname
+{
+  position:absolute;
+}
+.span4 {  
+    height: 100%;
+    overflow: auto;
+}
+
+.alert{
+  background-color:red;
+  font-weight:bold;
+}
+
+#tooltip
+{
+  background:#f9f9f9;
+  border:1px solid #eee;
+  text-align:center;
+  font-size:smaller;
+  padding:3px;
+}
+
+#taskcontainer
+{
+margin-right: 0px;
+margin-left: 140px;
+}
+
+.top-buffer { margin-top:10px; }
+
+
+
+
+
+
+div.dp_ignore_1
+{
+  text-decoration: line-through;
+}
+div.dp_0_0
+{
+  cursor:pointer;
+  background-color:#FFFF80;
+  border:0 solid #000;
+}
+
+div.dp_0_1
+{
+  cursor:pointer;
+  background-color:#FFFF80;
+  border:1px solid #000;
+}
+
+div.dp_1_0
+{
+  cursor:pointer;
+  background-color:#FFFFF0;
+  border:0 solid #000;
+}
+
+div.dp_1_1
+{
+  cursor:pointer;
+  background-color:#FFFFF0;
+  border:1px solid #000;
+}
+
+div.autocomplete
+{
+  position:absolute;
+  width:250px;
+  background-color:white;
+  border:1px solid #888;
+  margin:0;
+  padding:0;
+}
+
+div.autocomplete ul
+{
+  list-style-type:none;
+  margin:0;
+  padding:0;
+}
+
+div.autocomplete ul li.selected
+{
+  background-color:#ffb;
+}
+
+div.autocomplete ul li
+{
+  list-style-type:none;
+  display:block;
+  right:32px;
+  cursor:pointer;
+  margin:0;
+  padding:2px;
+}
+
+#resultsgrid
+{
+    height:350px;
+    overflow: auto;
+}
+.crfBox
+{
+  position:absolute;
+  left:33px;
+  background-color:white;
+  top:35px;
+  width:1024px;
+  border:1px solid #000;
+  margin:0 auto;
+  padding:1px;
+}
+
+.selectBox
+{
+  position:absolute;
+  left:33px;
+  background-color:white;
+  top:35px;
+  width:512px;
+  border:1px solid #000;
+  margin:0 auto;
+  padding:1px;
+}
+.veirt_detail
+{
+  height:100px;
+}
+
+.subjectIn
+{
+  position:absolute;
+  left:41px;
+  background-color:white;
+  top:140px;
+  width:200px;
+  border:1px solid #000;
+  margin:0 auto;
+  padding:1px;
+}
+
+.rackBox
+{
+  position:fixed;
+  left:300px;
+  top:30px;
+  width:254px;
+  border:1px solid #100;
+  margin:0 auto;
+  padding:5px;
+}
+
+.ItemInfo
+{
+  position:fixed;
+  float:right;
+  left:600px;
+  top:45px;
+  width:230px;
+  border:1px solid #100;
+  margin:0 auto;
+  padding:5px;
+}
+
+
+.boxInfo
+{
+  position:fixed;
+  left:350px;
+  top:35px;
+  border:1px solid #100;
+  margin:0 auto;
+  padding:5px;
+}
+
+.wellInfo
+{
+  position:fixed;
+  left:450px;
+  top:50px;
+  width:400px;
+  border:1px solid #100;
+  margin:0 auto;
+  padding:5px;
+}
+.lbuttons {
+margin-top: 25px;
+}
+
+.shipments
+{
+  background-color:white;
+  border:1px solid #888;
+  border-color:#f0f0f0;
+}
+
+.spicoli
+{
+padding: 2px;
+  background-color:#f0f0f0;
+}
+
+.shipment
+{
+  margin:1px 0 0 1px;
+  background-color:white;
+  border:1px solid #888;
+  border-color:#a0a0a0;
+  vertical-align:middle;
+}
+
+.boxViewContainer
+{
+  width: auto;
+  padding: 0;
+  background-color:white;
+  border:3px solid #888;
+}
+
+.boxView
+{
+  width:150px;
+  text-align:center;
+  vertical-align:middle;
+  background-color:white;
+  border:1px solid #888;
+}
+
+.benchView
+{
+  position:fixed;
+  /*left:170px;*/
+  top:50px;
+  width:200px;
+  border:1px solid #100;
+  margin:0 auto;
+  padding:5px;
+}
+
+.benchBox
+{
+  /*float:left;*/
+  width:50px;
+  height:25px;
+  border:1px solid #000;
+  margin:1px 0 0 1px;
+  padding:1px;
+}
+
+.boxView
+{
+  /*float:left;
+  width:600px;
+  /*height:25px;*/
+  border:1px solid #000;
+  margin:1px 0 0 1px;
+  padding:1px;
+}
+
+.boxStatus
+{
+  position:fixed;
+  left:420px;
+  top:80px;
+  border:1px solid #100;
+  margin:0 auto;
+  padding:5px;
+}
+.boxEdit
+{
+  position:fixed;
+  left:350px;
+  top:180px;
+  width:380px;
+  border:1px solid #100;
+  margin:0 auto;
+  padding:5px;
+}
+
+.rowFloat
+{
+  margin:0 auto;
+  padding:5px;
+}
+.row {
+   margin-right: 0px;
+   margin-left: 0px;
+}
+.wellFloat
+{
+  float:left;
+  width:22px;
+  height:22px;
+  border:1px solid #000;
+  margin:1px 1px 1px 1px;
+  padding:1px;
+}
+
+.destFloat
+{
+  float:left;
+  width:15px;
+  height:8px;
+  margin:3px 3px 3px 3px;
+  padding:1px;
+}
+
+.boxFloat
+{
+  float:left;
+  width:45px;
+  height:25px;
+  border:2px solid #000;
+  margin:1px 1px 1px 1px;
+  padding:1px;
+  background-color:#F8F8F8;
+  border-color:#888888;
+  text-align:center;
+  font-size: 12px;
+  vertical-align:middle;
+}
+
+.activebox
+{
+  width:43px;
+  height:23px;
+  border:3px solid #000;
+  background-color:#FFFFFF;
+}
+
+.rackFloat
+{
+  float:left;
+  width:70px;
+  height:50px;
+  border:1px solid #000;
+  margin:1px 0 0 1px;
+  padding:1px;
+}
+
+.boxhead
+{
+  border-collapse:separate;
+  border-spacing:0;
+  empty-cells:show;
+  font-size:11px;
+  text-align:right;
+}
+
+.wellSpacer
+{
+  float:left;
+  width:30px;
+  height:30px;
+  border:0 solid #000;
+  margin:1px 0 0 1px;
+  padding:1px;
+}
+
+.lcolumn .btn {
+width: 140px;
+}
+.buttonbar {
+    background: url(data:image/svg+xml;base64,alotofcodehere);
+    background: -moz-linear-gradient(bottom,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,rgba(255,255,255,0)), color-stop(90%,rgba(255,255,255,1)));
+    background: -webkit-linear-gradient(bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+    background: -o-linear-gradient(bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+    background: -ms-linear-gradient(bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+    background: linear-gradient(to top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+}
+
+
+.lcolumn {
+width: 145px;
+    position:absolute;
+    z-index:2;
+    right:0; bottom:0; left:0;
+    height:200px; /* adjust it to your needs */
+    background: url(data:image/svg+xml;base64,alotofcodehere);
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(90%,rgba(255,255,255,1)));
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+    background: -o-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+    background: -ms-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+    background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,1) 90%);
+  text-align:center;
+  vertical-align:middle;
+}
+
+.tablib_selected
+{
+  background-color:#FFFFFF;
+  color:#3366CC;
+  cursor:default;
+  font-weight:bold;
+  width:75px;
+  border-color:#676767;
+  border-style:solid;
+  border-width:1px 1px 0;
+  padding:2px;
+}
+
+.buttonlib_selected
+{
+  background-color:#FFFFFF;
+  color:#3366CC;
+  cursor:default;
+  font-weight:bold;
+  width:80px;
+  height:17px;
+  border-color:#676767;
+  border-style:solid;
+  border-width:1px 1px 0;
+  padding:2px;
+}
+
+.buttonlib_unselected
+{
+  background-color:#7788DD;
+  color:#000000;
+  cursor:pointer;
+  width:80px;
+  height:17px;
+  border-color:#AAAAAA #AAAAAA #676767;
+  border-style:solid;
+  border-width:1px;
+  padding:2px;
+}
+
+.tablib_unselected
+{
+  background-color:#DDDDDD;
+  color:#000000;
+  cursor:pointer;
+  width:75px;
+  border-color:#AAAAAA #AAAAAA #676767;
+  border-style:solid;
+  border-width:1px;
+  padding:2px;
+}
+/* hover doesn't seem to be working
+ul.nav div.btn-group button.foo:hover + ul.dropdown-menu{
+display:block;
+}
+*/
+div.left_column
+{
+  width:150px;
+  float:left;
+  text-align:center;
+  vertical-align:middle;
+  background-color:white;
+  border:1px solid #888;
+}
+div.crfparent
+{
+  width:100px;
+  float:left;
+  text-align:left;
+  border:1px solid #ccc;
+  background-color:#999;
+}
+
+.table-striped
+{
+  background-color:#fffffe;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+      stroke-width: 0;
+}
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+      stroke-width: 0;
+}
+
+.pull-spec {
+  background: url("/sps/images/pull-spec.png") no-repeat center center;
+}
+.randomize {
+  background: url("/sps/images/randomizer.png") no-repeat center center;
+}
+.ui-datepicker {
+  background-color:white;
+}

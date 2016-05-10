@@ -1,0 +1,62 @@
+<div class="selector"  id="{{spot_id}}" style="height: 100%;overflow: scroll"></div>
+<script type = "text/javascript">
+	handlers['{{spot_id}}'] = function(view)  {
+console.log(view.model.freezer);
+var freezer = view.model.freezer;
+var boxes = new Backbone.Collection(freezer.boxes);
+
+
+//override the default view for the expand button
+var columns = [{
+    name: "id_visit",
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "sample_type",
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "shipment_type",
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "freezer_name",
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "shelf",
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "rack",
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "box",
+    editable: false, 
+    cell: "string"
+  }, {
+    name: "percent_full",
+    editable: false, 
+    cell: "string"
+  },
+];
+// Initialize a new Grid instance
+var grid = new Backgrid.Grid({
+  columns: columns,
+  collection: boxes
+});
+//Sps.grid = grid;
+/*
+var filter = new BackgridFilter({
+  collection: results_collection,
+  fields: ['objectType']
+});
+
+jQuery("#griddy").before(filter.render().el);
+*/
+jQuery("#{{spot_id}}").append(grid.render().el);
+
+
+}
+</script>

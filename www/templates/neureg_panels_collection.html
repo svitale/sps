@@ -1,0 +1,28 @@
+<div class="row">
+ <div class="col-sm-6 col-md-4">
+   <form role="form">
+   <div class="form-group">
+     <label for="plate">Plate</label>
+       <select name="plate" class='select' size=4 multiple>
+       {{#json}}
+        <option value="{{id}}" class="status_{{status}}">{{number}} - {{assayDate}} - {{user}}</option>
+       {{/json}}
+       </select>
+   </form>
+    <div class="form-group">
+        <form action="/finch/controllers/microarray" method="post" enctype="multipart/form-data">
+        <select name="dic" class="btn">
+	<option value="mapa">Map A</option>
+	<option value="mapb">Map B</option>
+	</select>
+        <label for="file">Upload</label>
+        <input type="file" name="file" id="file">
+        <input type="hidden" name="id_assay" value="Neuregulin">
+        <input type="hidden" name="id_instrument" value="sm2">
+
+        <input type="hidden" name="datetime_assay" value="2014-11-18 00:00:00">
+        <input type="hidden" name="id_assay" value="Neuregulin">
+        <button class="btn" value="submit" id="submit" name="submit">submit</button>
+        </form>
+    </div>
+ </div>

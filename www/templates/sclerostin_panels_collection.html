@@ -1,0 +1,12 @@
+<h4>Plates</h4>
+<div class="row">
+ <div class="col-sm-6 col-md-4">
+   <form role="form">
+   <div class="form-group">
+       <select name="plate" class='select' size=11 multiple>
+       {{#json}}
+        <option value="{{id}}" class="status_{{status}}">{{number}} - {{assayDate}} - {{user}}</option>
+       {{/json}}
+       </select>
+   </form>
+ </div>

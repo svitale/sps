@@ -1,0 +1,51 @@
+<div class="row">
+<h4>{{model.name}}</h4>
+  <div class="col-sm-5">
+    <ul class="list-group">
+       {{#model.methodMan.mmvars}}
+          <li class="list-group-item">
+          <span class="badge">{{value}}</span>
+          {{name}}
+          </li>
+       {{/model.methodMan.mmvars}}
+    </ul>
+  </div>
+  <div class="col-md-7">
+    <ul class="list-group">
+       {{#model.controls}}
+          <li class="list-group-item">
+            {{lotNumber}}
+            {{expectedValue}}
+            {{objectName}}
+            {{sdThreshhold}}
+          </li>
+       {{/model.controls}}
+          <li class="list-group-item">
+          <span class="badge">{{model.methodMan.functionName}}</span>
+          method
+          </li>
+    </ul>
+  </div>
+  <div class="col-md-7">
+    <ul class="list-group">
+       {{#model.controls}}
+          <li class="list-group-item">
+            {{lotNumber}}
+            {{expectedValue}}
+            {{objectName}}
+            {{sdThreshhold}}
+          </li>
+       {{/model.controls}}
+          <li class="list-group-item">
+          <span class="badge">{{model.methodMan.functionName}}</span>
+          method
+          </li>
+    </ul>
+  </div>
+
+</div>
+<script>
+handlers['{{spot_id}}'] = function(view)  {
+console.log(view);
+}
+</script>

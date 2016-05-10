@@ -1,0 +1,12 @@
+<div class="row">
+ <div class="col-sm-6 col-md-4">
+   <form role="form">
+   <div class="form-group">
+     <label for="plate">Plate</label>
+       <select name="plate" class='select' size=8 multiple>
+       {{#json}}
+        <option value="{{id}}" class="status_{{status}}">{{number}} - {{assayDate}}</option>
+       {{/json}}
+       </select>
+   </form>
+ </div>

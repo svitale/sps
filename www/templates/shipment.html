@@ -1,0 +1,28 @@
+<div class="row top-buffer shipment">
+    <div class="form-group">
+<label class="control-label" for="site_select">Site</label>
+        <select class="btn select" name=site id="site_select">
+        <option value=""></option>
+        {{#sites.models}}
+        <option name=site value="{{attributes.name}}" {{#selected}}selected{{/selected}}>{{attributes.name}}</option>
+        {{/sites.models}}
+        </select>
+        {{attributes.name}}
+       <label class="control-label" for="tracking_number">Tracking Number</label>
+        <input type="text"  name="tracking_number" value="{{model.attributes.tracking_number}}">
+         <form style="display:inline;">
+        <input type="radio" name="handler" value="ups" {{#is_ups}}checked{{/is_ups}}>ups
+        <input type="radio" name="handler" value="fedex" {{#is_fedex}}checked{{/is_fedex}}>fedex
+        </form>
+        {{#tracking_ref}} 
+        <a href="{{tracking_ref}}">track</a>
+        {{/tracking_ref}}
+        <span class="pull-right">
+        <button class="btn button" value="delete" name="delete">delete</button>
+        <button class="btn button btn-success" value="attach" name="attach">attach</button>
+        <button class="btn button" value="echo" id="{{model.attributes.id}}" name="echo">echo</button>
+        </span>
+    </div>
+<div class='parcel'></div>
+
+</div>

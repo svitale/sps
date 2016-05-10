@@ -1,0 +1,280 @@
+<div id='spot_{{spot_id}}'></div>
+<script type = "text/javascript">
+$('#spot_{{spot_id}}').empty();
+handlers['{{spot_id}}'] = function(view)  {
+    var results  = view.model.get('results');
+    var project = view.model.get('project');
+    var assays = project.get('assays');
+    var mmvars = assays[0].methodMan.mmvars
+    var chartlines = {};
+    for (var i in mmvars) {
+      var name = mmvars[i]['name'];
+      var val = mmvars[i]['value'];
+      chartlines[name] = val;
+    }
+    var max = chartlines['ul'];
+
+    var data = results.toJSON();
+    var n = data.length;
+     
+    //scaling factor
+    var r=1.7+100/n
+    var radius = r;
+    view = this;
+    var spot_name = 'spot_{{spot_id}}';
+    view.d3 = d3.select('#'+spot_name);
+
+    var GraphView = Backbone.View.extend({
+        initialize: function(options) {
+            console.log('initializing graphview');
+            this.svg = d3.select(this.el);
+            this.x_axis = options.x_axis;
+            this.y_axis = options.y_axis;
+            this.render();
+        },
+        render: function() {
+            var margin = {top: 10, right: 20, bottom: 40, left: 50},
+             width = Math.round({{width}}) - margin.left - margin.right,
+             height = Math.round({{height}}) - margin.top - margin.bottom;
+            var view = this;
+
+            // set scaling factors
+            var xScale = d3.scale.log()
+             .domain([1, max])
+             .range([.1, width]);
+            var yScale = d3.scale.log()
+             .domain([.1, 150])
+             .range([height, 0]);
+
+            // x axis function
+            var xAxis = d3.svg.axis().scale(xScale)
+             .tickFormat(function (d) {
+                 return xScale.tickFormat(5,d3.format("d"))(d)
+             });
+
+            // y axis function
+            var yAxis = d3.svg.axis().scale(yScale)
+             .orient("left")
+             .tickFormat(function (d) {
+                 return yScale.tickFormat(8,d3.format(",.1f"))(d)
+             });
+
+            // x gridlines functions
+            var xGrid = function() {
+                var ax = d3.svg.axis()
+                 .scale(xScale)
+                 .orient("bottom")
+                 .ticks(5);
+                return ax;
+	    };
+            // y gridines function
+            var yGrid = function() {
+                var ay = d3.svg.axis()
+                 .scale(yScale)
+                 .orient("left")
+                 .ticks(5);
+                return ay;
+	    };
+
+            // generate color for graph elements
+            var spotColor  = function(d) {
+               switch (d['objectType']) {
+                 case "standard":  
+                   return d3.rgb("grey");
+                 break;
+                 case "control":  
+                   return d3.rgb("yellow");
+                 break;
+                 default:  
+                  if (d['retest']) {
+                      return d3.rgb("red");
+                  } else {
+                      return d3.rgb("blue");
+                  }
+                  break;
+               }
+	   };
+
+            // generate color for graph elements
+            var triggerResult = function(datum,evtName) {
+                var result = view.model.attributes.results._byId[datum.id];
+                var result_id = datum.id;
+                result.trigger(evtName);
+            };
+
+
+
+
+           //full panel
+            var s = view.svg;
+            s.attr("width", '100%')
+             .attr("height", '100%')
+             .style("background-color", "white");
+
+           // y label
+            s.append("text")
+             .attr("class", "y label")
+             .attr("text-anchor", "end")
+             .attr("dy", ".75em")
+             .attr("x", -margin.top -height/2)
+             .attr("y", 0)
+             .text("cv, %")
+             .attr("transform", "rotate(-90)");
+
+           // x label
+            s.append("text")
+             .attr("class", "x label")
+             .attr("text-anchor", "end")
+             .attr("x", (margin.left+ width/2))
+             .attr("y", height + margin.bottom)
+             //.text(view.x_axis.get('label'));
+             .text('mean, pm');
+
+           // y axis
+            s.append("g")                 
+             .attr("class", "y axis")
+             .attr("transform", "translate("+margin.left+","+margin.top+")")
+	     .call(yAxis);
+
+           // x axis
+            var bottomline = height+margin.top;
+            s.append("g")                 
+             .attr("class", "x axis")
+             .attr("transform", "translate("+margin.left+","+bottomline+")")
+	     .call(xAxis);
+
+            // Add the X grid lines
+            var grid = s.append("svg");
+            grid.attr("x", margin.left)
+             .attr("y", margin.top)
+	    grid.append("g")         
+ 	     .attr("class", "grid")
+	     .attr("transform", "translate(0," + height + ")")
+	     .call(xGrid()
+	       .tickSize(-height, 0, 0)
+               .tickFormat("")
+	     );
+
+            // Add the Y grid lines
+	    grid.append("g")         
+             .attr("class", "grid")
+             .call(yGrid()
+               .tickSize(-width, 0, 0)
+	       .tickFormat("")
+	     );
+
+            //chart lines to segment the acceptable values
+            var vlim = chartlines['vlim'];
+            var vlimLineData = [ { "x": xScale(vlim),   "y": 0},  { "x": xScale(vlim),  "y": height}];
+            var hliml = chartlines['hlimL'];
+            var hlimlLineData = [ { "x": xScale(vlim),   "y": yScale(hliml)},  { "x": width,  "y": yScale(hliml)}];
+            var hlimh = chartlines['hlimH'];
+            var hlimhLineData = [ { "x": 0,   "y": yScale(hlimh)},  { "x": xScale(vlim),  "y": yScale(hlimh)}];
+            var ul = chartlines['ul'] 
+            var ulLineData = [ { "x": xScale(ul),   "y": 0},  { "x": xScale(ul),  "y": height}];
+
+            var lineFunction = d3.svg.line()
+             .x(function(d) { return d.x; })
+             .y(function(d) { return d.y; })
+             .interpolate("linear");
+
+            grid.append("path")
+            .attr("d", lineFunction(vlimLineData))
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("fill", "none");
+
+            grid.append("path")
+            .attr("d", lineFunction(hlimlLineData))
+            .attr("stroke", "red")
+            .style("stroke-dasharray", ("3, 3"))
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
+
+            grid.append("path")
+            .attr("d", lineFunction(hlimhLineData))
+            .attr("stroke", "red")
+            .style("stroke-dasharray", ("3, 3"))
+            .attr("stroke-width", 2)
+            .attr("fill", "none");
+
+            grid.append("path")
+            .attr("d", lineFunction(ulLineData))
+            .attr("stroke", "black")
+            .style("stroke-dasharray", ("3, 3"))
+            .attr("stroke-width", 2)
+
+            .on("mouseover", function() {
+              d3.select(this).enter().append("text")
+             .text('foo');
+            });
+
+            // put the data we wish to graph in the plot area
+	    var gData = grid.selectAll( "g.state").data( data);
+	    var gDatum = gData.enter().append( "g")
+	    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	     .attr({'class' : 'state'});
+
+            gDatum.append( "circle")
+	    .attr({
+              r : radius +4,
+              class : 'outer',
+              cx : function(d) {
+                var cx = d['interpretedValue'];
+                if (cx != 0 && cx != null) {
+                  return xScale(cx);
+                } else {
+                  return 0;
+                }
+               },
+               cy : function(d) {
+                 var cy = d['interpretedCv'];
+                 if (cy != 0 && cy != null) {
+                   return yScale(cy);
+                 } else {
+                   return 0;
+                 }
+               }
+	    });
+
+            gDatum.append( "circle")
+	     .attr({
+               r : function( d) {
+                 if (d.objectType == 'control') {
+                   return radius *2;
+                 } else if (d.objectType == 'standard'){
+                   return radius;
+                 } else {
+                   return radius;
+                 }
+               },
+               class : 'inner',
+               cx : function(d) {
+                 var cx = d['interpretedValue'];
+                 if (cx !=0 && cx != null) {
+                   return xScale(cx);
+                 } else {
+                   return 0;
+                 }
+                },
+		cy : function(d) {
+			var cy = d['interpretedCv'];
+			if (cy != null && cy > .1) {
+				return yScale(cy);
+			} else {
+				return yScale(1);
+			}
+		},
+	      })
+
+             .style("fill",function(d) {
+               return spotColor(d)
+             })
+        },
+    });
+
+    var svg = view.d3.append("svg")
+     .attr("width", {{width}})
+     .attr("height", {{height}});
+new GraphView({model:results,el:svg[0]});
+};

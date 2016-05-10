@@ -1,0 +1,17 @@
+<div class='selector'>
+Project
+	<select name="project" class='btn'>
+		{{#selection}}
+			<option value="{{value}}" "{{selected}}">{{name}}</option>
+		{{/selection}}
+                {{#collection.models}}
+                        <option value="{{attributes.id}}">{{attributes.name}}</option>
+                {{/collection.models}}
+	</select>
+</div>
+<script>
+var handlers = [];
+handlers['{spot_id}'] = function (view) {
+  console.log(view);
+}
+</script>

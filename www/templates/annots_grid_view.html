@@ -1,0 +1,25 @@
+<div class="row">
+ <table id="table_{{spot_id}}" class="table-condensed table-bordered" cellspacing="0" width="100%">
+       <thead>
+             <tr>
+                <th>run</th>
+                <th>plate</th>
+                <th>user</th>
+                <th>name</th>
+                <th>type</th>
+                <th>absor</th>
+                <th>value</th>
+                <th>cv</th>
+            </tr>
+        </thead>
+ 
+ </table>
+</div>
+<script>
+handlers[{{spot_id}}] = function(view) {
+  var data = view.model.combined.get('results');
+  var dom = 'T<"top">rtp<"bottom">i';
+  var fields = ['run','plateName','user','objectName','objectType','measuredValue','interpretedValue','interpretedCv'];
+  view.renderTable(data,fields,dom);
+}
+</script>

@@ -1,0 +1,121 @@
+<div id="actioncontainer"></div>
+<div id="inventory_error"></div>
+<div id="inventory_total"></div>
+<div id="inventory_limit"></div>
+<!-- <input type="button" onclick="printMatches();" value="print all"> -->
+<!-- <div id="demo"></div> -->
+<div class="selector"  id="griddy" style="height: 100%;overflow: scroll"></div>
+<script type = "text/javascript">
+if(!Sps.handler) {
+Sps.handler = [];
+}
+Sps.handler['pendingshipments'] = function(view)  {
+	var model = view.model;
+	var inventory_collection = model.attributes.records;
+  jQuery('#inventory_total').html("<div>Matching: "+model.attributes.total + "</div>");
+  jQuery('#inventory_limit').html("<div>Limit: "+model.attributes.limit + "</div>");
+  jQuery('#inventory_error').html(model.attributes.error);
+  // document.getElementById("demo").innerHTML = model.attributes;
+  // document.write (model);
+
+  printMatches = function (){
+    inventory_collection.forEach(printlabel(this.model.id,'batch_quality'));
+  }
+
+// var PrintMatches = Backbone.View.extend({
+//   for each (item in inventory_collection){
+//     initialize: function() {
+//       this.listenTo(this.model, "select", this.select);
+//       this.listenTo(this.model, "deselect", this.deselect);
+//       this.render();
+//     },
+//     events: {
+//       "click .btn": "buttonClick"
+//     },
+//     buttonClick: function () {
+//       printlabel(this.model.id,'batch_quality');   
+//     }
+//   }
+// });
+
+//override the default view for the expand button
+var PrintCell = Backbone.View.extend({
+  initialize: function() {
+    this.listenTo(this.model, "select", this.select);
+    this.listenTo(this.model, "deselect", this.deselect);
+    this.render();
+  },
+  render: function() {
+    //set the expand button
+    this.$el.html('<button class="btn" id="print"><span class="glyphicon glyphicon-print"></span></button>');
+    return this;
+  },
+  events: {
+    "click .btn": "buttonClick"
+  },
+  buttonClick: function () {
+    printlabel(this.model.id,'batch_quality');   
+  }
+});
+
+
+// do I need id_uuid?
+
+var columns = [{
+    name: "id_barcode",
+    label: jQuery.i18n.prop('id_barcode'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "id_subject",
+    label: jQuery.i18n.prop('id_subject'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "sample_type",
+    label: jQuery.i18n.prop('sample_type'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "treatment",
+    label: jQuery.i18n.prop('treatment'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "collection_time",
+    label: jQuery.i18n.prop('collection_time'),
+    editable: false, 
+    cell: "string"
+  },{
+    name: "sample_name",
+    label: jQuery.i18n.prop('sample_name'),
+    editable: false,
+    cell: "string"
+  },{
+    name: "sample_identifier",
+    label: jQuery.i18n.prop('sample_identifier'),
+    editable: false,
+    cell: "string"
+  },{
+    name: "",
+    label: "Print",
+    cell: PrintCell,
+    sortable: false,
+    editable: false
+  // },{
+  //   name: "",
+  //   label: "Print All",
+  //   cell: PrintMatches,
+  //   sortable: false,
+  //   editable: false
+  }
+];
+// Initialize a new Grid instance
+var grid = new Backgrid.Grid({
+  columns: columns,
+  collection: inventory_collection
+});
+Sps.grid = grid;
+jQuery("#griddy").append(grid.render().el);
+}
+</script>

@@ -1,0 +1,30 @@
+<div class="row">
+
+
+ <div class="col-sm-6">
+   <div class="progress">
+     <span class="progress-bar progress-bar-success" style="width: {{per_imp}}%">
+       <span class="sr-only">{{per_imp}}% Imported</span>
+     </span>
+     <span class="progress-bar progress-bar-info" style="width: {{per_sel}}%">
+       <span class="sr-only">{{per_sel}}% Selected</span>
+     </span>
+     <span class="progress-bar progress-bar-error" style="width: {{per_ign}}%">
+        <span class="sr-only">{{per_ign}}% Ignored</span>
+     </span>
+   </div>
+  </div>
+ <div class="col-med-1">
+{{num_sel}} of {{num_tot}}  selected
+ </div>
+</div>
+
+<div class="row">
+   <div class="col-sm-6 col-md-4">
+     <div class="form-group">
+       <button class="btn btn-success button" name="import">import</button>
+       <button class="btn btn-error button" name="ignore">ignore</button>
+       <button class="btn btn-default button" name="echo">echo</button>
+     </div>
+  </div>
+</div>

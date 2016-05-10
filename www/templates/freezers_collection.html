@@ -1,0 +1,32 @@
+<div class='selector' id="{{spot_id}}" style="overflow-y:scroll;overflow-x:scroll">
+  <div class="well">
+    <label for=freezer_name>Freezer Name</label>
+    <select name='freezer' id='freezer_name' class='select' size=1>
+        <option value="" ></option>
+      {{#model.attributes.freezers.models}}
+        <option value="{{id}}" {{selected}} >{{attributes.name}}</option>
+      {{/model.attributes.freezers.models}}
+    </select>
+  </div>
+  <div class="well">
+    <h4>Utilization</h4>
+    <label for=low_fader>From</label>
+    <input class=range name='low_cutoff' type=range min=0 max=100 value={{model.attributes.low_cutoff}} id=low_fader step=1 onchange="outputUpdate(value,'low_cutoff')">
+    <output for=lowfader id=low_cutoff>{{model.attributes.low_cutoff}}</output>
+    <label for=high_fader>To</label>
+    <input class=range name='high_cutoff' type=range min=0 max=100 value={{model.attributes.high_cutoff}} id=high_fader step=1 onchange="outputUpdate(value,'high_cutoff')">
+    <output for=high_fader id=high_cutoff>{{model.attributes.high_cutoff}}</output>
+  </div>
+</div>
+<script type = "text/javascript">
+handlers['{{spot_id}}'] = function(view) {
+console.log(view);
+};
+console.log({{low_cutoff}});
+function outputUpdate(val,sliderID) {
+  var text = document.getElementById(sliderID);
+  text.value = val;
+
+}
+
+</script>

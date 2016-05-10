@@ -1,0 +1,34 @@
+CREATE TABLE `tclab`.`log_results` (
+`id` INT( 8 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id_result` INT( 8 ) NOT NULL ,
+`timestamp` DATETIME NOT NULL ,
+`user_name` VARCHAR( 20 ) NOT NULL ,
+`event_type` VARCHAR ( 20 ) NOT NULL ,
+`field` VARCHAR( 64 ) NOT NULL ,
+`old_value` VARCHAR( 64 ) NOT NULL ,
+`new_value` VARCHAR( 64 ) NOT NULL ,
+INDEX ( `id_result` )
+) ENGINE = InnoDB;
+
+
+ALTER TABLE `results` ADD `name_last_updated` VARCHAR( 20 ) NOT NULL;
+
+delimiter //
+
+create procedure proc_auditresults (IN in_id_result int(8), in_user_name varchar(20), in_event_type varchar(20), in_field varchar(64), in_old_value varchar(64), in_new_value varchar(64))
+BEGIN
+    IF in_old_value != in_new_value THEN
+        insert into log_results (id_result, timestamp, user_name, event_type, field, old_value, new_value) values(in_id_result, NOW(), in_user_name, in_event_type, in_field, in_old_value, in_new_value);
+    END IF;
+END //
+
+create trigger trg_auditresults before update on results
+for each row
+    BEGIN
+        call proc_auditresults(NEW.id, NEW.name_last_updated, 'update', 'value', OLD.value, NEW.value);
+        call proc_auditresults(NEW.id, NEW.name_last_updated, 'update', 'reagent', OLD.reagent, NEW.reagent);
+        call proc_auditresults(NEW.id, NEW.name_last_updated, 'update', 'calibtrator', OLD.calibrator, NEW.calibrator);
+        call proc_auditresults(NEW.id, NEW.name_last_updated, 'update', 'cleaner', OLD.cleaner, NEW.cleaner);
+    END //
+
+delimiter ;

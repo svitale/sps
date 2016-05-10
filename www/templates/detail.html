@@ -1,0 +1,53 @@
+<div class="row">
+ <div class="col-sm-6 col-md-4">
+   <div class="form-group">
+     <p>{{model.selected.id}}</p>
+     <label for="name">Name</label>
+     <input type="text"  name="name" value="{{model.selected.attributes.name}}" class="form-control" placeholder="name">
+     <label for="name">Description</label>
+     <textarea class="form-control" value='{{json.description}}' rows='3' placeholder="description"></textarea>
+   </div>
+   <button class="btn btn-default button" name="append">append</button>
+   <button class="btn btn-default button" name="echo">echo</button>
+   <button class="btn btn-primary button" name="save">save</button>
+   <button class="btn btn-default button" name="render">render</button>
+   <button class="btn btn-default button" name="export">export</button>
+ </div>
+ <div class="col-md-8">
+ <table id="example" class="table-condensed table-striped table-bordered" cellspacing="    0" width="100%">
+       <thead>
+             <tr>
+                <th>run</th>
+                <th>plate</th>
+                <th>name</th>
+                <th>value</th>
+                <th>cv</th>
+            </tr>
+        </thead>
+ 
+    </table>
+  </div>
+</div>
+<script>
+/*
+if (view.model) {
+    var results = view.model.get('results');
+    var json = results.toJSON();
+console.log(json);
+    $('#example').dataTable( {
+        "dom": '<"top">rt<"bottom">fi',
+        "scrollY": "265px",
+        "paginate": false,
+        "scrollCollapse": true,
+        "data": json,
+        "columns": [
+            { "data": "run" },
+            { "data": "plateName", "width": "10%" },
+            { "data": "objectName" },
+            { "data": "interpretedValue" },
+            { "data": "interpretedCv" },
+        ]
+    });
+}
+*/
+</script>

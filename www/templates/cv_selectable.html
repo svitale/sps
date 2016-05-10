@@ -1,0 +1,339 @@
+<div id='spot_{{spot_id}}'></div>
+<script type = "text/javascript">
+$('#spot_{{spot_id}}').empty();
+	handlers['{{spot_id}}'] = function(view)  {
+        //console.log('cv_selectable');
+        var results  = view.model.get('results');
+        var data = results.toJSON();
+	var n = data.length;
+//scaling factor
+	var r=1.7+100/n
+	var radius = r;
+
+//set panel size and style
+        var margin = {top: 10, right: 20, bottom: 40, left: 50},
+            width = {{width}} - margin.left - margin.right,
+            height = {{height}} - margin.top - margin.bottom;
+
+
+// set scaling factors
+	var mean_min = d3.min(data, function(d) { return d['interpretedValue']; });
+	var mean_max = d3.max(data, function(d) { return d['interpretedValue']; });
+	var cv_min = d3.min(data, function(d) { return d['interpretedCv']; });
+	var cv_max = d3.max(data, function(d) { return d['interpretedCv']; });
+	var xScale = d3.scale.log()
+		//.domain([mean_min, mean_max])
+		.domain([1, 300])
+		.range([.1, width]);
+	var yScale = d3.scale.log()
+		.domain([.1, 150])
+		.range([height, 0]);
+	var xAxis = d3.svg.axis().scale(xScale)
+        .tickFormat(function (d) {
+		return xScale.tickFormat(5,d3.format("d"))(d)
+	});
+        var yAxis = d3.svg.axis().scale(yScale)
+        .orient("left")
+        .tickFormat(function (d) {
+                return yScale.tickFormat(8,d3.format(",.1f"))(d)
+        });
+	var xGrid = function() {
+		  var ax = d3.svg.axis()
+                .scale(xScale)
+                .orient("bottom")
+                .ticks(5);
+                return ax;
+	};
+	var yGrid = function() {
+                var ay = d3.svg.axis()
+                .scale(yScale)
+                .orient("left")
+                .ticks(5);
+                return ay;
+	};
+	var triggerResult = function(datum,evtName) {
+		var result = view.model.attributes.results._byId[datum.id];
+		var result_id = datum.id;
+		result.trigger(evtName);
+	};
+
+// generates color for graph elements
+	 var spotColor  = function(d) {
+		switch (d['objectType']) {
+			case "standard":  
+				return d3.rgb("grey");
+				break;
+			case "control":  
+				return d3.rgb("yellow");
+				break;
+			default:  
+				if (d['retest']) {
+				    return d3.rgb("red");
+                                } else {
+				    return d3.rgb("blue");
+                                }
+				break;
+		}
+	};
+
+// tooltip
+	var tooltip = d3.select("body")
+	.append("div")
+	.attr("border","1")
+	.style("position", "absolute")
+	.style("z-index", "10")
+	.style("visibility", "hidden")
+        .style("background-color", "white")
+
+// start formatting the div
+	var svg = d3.select("#spot_{{spot_id}}")
+	.append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .style("background-color", "white")
+            .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+// rectangle select
+svg.on( "mousedown", function() {
+    if( !d3.event.ctrlKey) {
+        d3.selectAll( 'g.selected').classed( "selected", false);
+    }   
+
+    var p = d3.mouse( this);
+
+    svg.append( "rect")
+    .attr({
+        rx      : 1,
+        ry      : 1,
+        class   : "selection",
+        x       : p[0],
+        y       : p[1],
+        width   : 0,
+        height  : 0 
+    })  
+})
+.on( "mousemove", function() {
+    var s = svg.select( "rect.selection");
+
+    if( !s.empty()) {
+        var p = d3.mouse( this),
+            d = { 
+                x       : parseInt( s.attr( "x"), 10),
+                y       : parseInt( s.attr( "y"), 10),
+                width   : parseInt( s.attr( "width"), 10),
+                height  : parseInt( s.attr( "height"), 10) 
+            },  
+            move = { 
+                x : p[0] - d.x,
+                y : p[1] - d.y 
+            }   
+        ;   
+
+        if( move.x < 1 || (move.x*2<d.width)) {
+            d.x = p[0];
+            d.width -= move.x;
+        } else {
+            d.width = move.x;       
+        }
+
+        if( move.y < 1 || (move.y*2<d.height)) {
+            d.y = p[1];
+            d.height -= move.y;
+        } else {
+            d.height = move.y;       
+        }
+       
+        s.attr( d);
+
+            // deselect all temporary selected state objects
+        d3.selectAll( 'g.state.selection.selected').classed( "selected", false);
+
+        d3.selectAll( 'g.state >circle.inner').each( function( state_data, i) {
+            if( 
+                !d3.select( this).classed( "selected") && 
+                    // inner circle inside selection frame
+                state_data.x-radius>=d.x && state_data.x+radius<=d.x+d.width && 
+                state_data.y-radius>=d.y && state_data.y+radius<=d.y+d.height
+            ) {
+
+                d3.select( this.parentNode)
+                .classed( "selection", true)
+                .classed( "selected", true);
+            }
+        });
+    }
+})
+.on( "mouseup", function() {
+       // remove selection frame
+    svg.selectAll( "rect.selection").remove();
+
+        // remove temporary selection marker class
+    d3.selectAll( 'g.state.selection').classed( "selection", false);
+})
+.on( "mouseout", function() {
+    if( d3.event.relatedTarget.tagName=='HTML') {
+            // remove selection frame
+        svg.selectAll( "rect.selection").remove();
+
+            // remove temporary selection marker class
+        d3.selectAll( 'g.state.selection').classed( "selection", false);
+    }
+});
+
+
+
+// Add the X Axis
+        svg.append("g")                 
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height +  ")")
+        .call(xAxis);
+        svg.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", (width + margin.left)/2)
+        .attr("y", height + margin.bottom * 4/5)
+        .text("mean, pm");
+
+// Add the Y Axis
+	svg.append("g")                 
+	.attr("class", "y axis")
+	.call(yAxis);
+        svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", -margin.left * 4/5)
+        .attr("x", -height * 1/2)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("cv, %");
+
+// Add the X grid lines
+	svg.append("g")         
+ 	.attr("class", "grid")
+	.attr("transform", "translate(0," + height + ")")
+	.call(xGrid()
+	.tickSize(-height, 0, 0)
+		.tickFormat("")
+	);
+
+// Add the Y grid lines
+	svg.append("g")         
+	.attr("class", "grid")
+	.call(yGrid()
+		.tickSize(-width, 0, 0)
+		.tickFormat("")
+	);
+
+
+// put the data we wish to graph in the plot area
+	var gData = svg.selectAll( "g.state").data( data);
+	var gDatum = gData.enter().append( "g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	.attr({'class' : 'state'});
+
+	gDatum.append( "circle")
+	.attr({
+		r : radius +4,
+		class : 'outer',
+		cx : function(d) {
+			var cx = d['interpretedValue'];
+			if (cx != 0 && cx != null) {
+				return xScale(cx);
+			} else {
+				return 0;
+			}
+		},
+		cy : function(d) {
+			var cy = d['interpretedCv'];
+			if (cy != 0 && cy != null) {
+				return yScale(cy);
+			} else {
+				return 0;
+				//return 0;
+			}
+		}
+	});
+	gDatum.append( "circle")
+	.attr({
+                r : function( d) {
+                    //    return 80;
+                    //} else if (d.objectType == 'control') {
+                    if (d.objectType == 'control') {
+                        return radius *2;
+                    } else if (d.objectType == 'standard'){
+                        return radius/2;
+                    } else {
+                        return radius;
+                    }
+                },
+
+
+		class : 'inner',
+		cx : function(d) {
+			var cx = d['interpretedValue'];
+			if (cx !=0 && cx != null) {
+				return xScale(cx);
+			} else {
+				return 0;
+			}
+		},
+		cy : function(d) {
+			var cy = d['interpretedCv'];
+			if (cy != null && cy > .1) {
+				return yScale(cy);
+			} else {
+				return yScale(1);
+			}
+		},
+		
+	})
+	.style("fill",function(d) {
+		return spotColor(d)
+	})
+	.on("mousemove", function(d) {
+		var text = d['objectName'];
+		var tip = tooltip.style("top",(d3.event.pageY-10)+"px")
+		.style("left",(d3.event.pageX+10)+"px")
+		.html(text);
+		return tip;
+	})
+	.on("mouseover", function(){
+		var datum = d3.select(this.parentNode).datum();
+		triggerResult(datum,'focusin');
+		d3.select(this)
+		.style("fill",function(d) {
+			return spotColor(d).darker('2')
+		})
+		return tooltip.style("visibility", "visible");
+	})
+	.on("mouseout", function() { 
+		var datum = d3.select(this.parentNode).datum();
+		triggerResult(datum,'focusout');
+		d3.select(this)
+		.style("fill",function(d) {
+			return spotColor(d)
+		})
+		return tooltip.style("visibility", "hidden");
+	})
+	.on( "click", function( d, i) {
+		var datum = d3.select(this.parentNode).datum();
+		// todo: move this into a view listener
+		var e = d3.event;
+		var g = this.parentNode;
+		var elem = d3.select( g);
+		var isSelected = elem.classed( "selected");
+                if (isSelected) {
+		    triggerResult(datum,'deselect');
+		} else {
+		    triggerResult(datum,'select');
+		}
+//		if( !e.ctrlKey) {
+			d3.selectAll( 'g.selected').classed( "selected", false);
+//		};
+		elem.classed( "selected", !isSelected);
+		g.parentNode.appendChild( g);
+	});
+
+};

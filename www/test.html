@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+		<title>Angular-RequireJS sample app</title>
+</head>
+<body>
+<div  id='foof'>
+	<h1>AngularJS + RequireJS</h1>
+	<ul class="menu">
+		<li><a href="#/view1">view1</a></li>
+		<li><a href="#/view2">view2</a></li>
+	</ul>
+
+	<!--[if lt IE 7]>
+			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+	<![endif]-->
+
+	<div ng-view></div>
+
+	<div>AngularJS + RequireJS seed app: v<span app-version></span></div>
+ <script data-main="/sps/js/main"  src="/sps/js/libs/require/require.js" type="text/javascript"></script>
+
+</body>
+</div>
+</html>

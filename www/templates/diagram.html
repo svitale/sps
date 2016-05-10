@@ -1,0 +1,21 @@
+{{#spots}}
+	<div id="spot_{{attributes.id}}" 
+	style="position: absolute; top: {{attributes.y1}}px; 
+		bottom: {{attributes.y2}}px;
+		left: {{attributes.x1}}px;
+		right: {{attributes.x2}}px;
+		width: {{attributes.width}}px;
+		height: {{attributes.height}}px;
+border-width:3px;
+border-style:solid;
+border-color:#abcdd9;
+border-radius:3px;
+		background-color: #bbd8e9;">
+		{{#attributes.data.button}}
+			<button style="display: block; width: 100%; height: 100%" type="button" class="btn btn-default btn-lg glyphicon glyphicon-{{attributes.data.button}}" id="{{attributes.data.event}}">{{attributes.data.button}}
+			</button>
+		{{/attributes.data.button}}
+		{{#!attributes.data.button}}
+		{{/!attributes.data.button}}
+	</div>
+{{/spots}}

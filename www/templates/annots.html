@@ -1,0 +1,39 @@
+<h4>Annotations</h4>
+<div class="row">
+ <div>
+   <div class="form-group">
+     <div class="row">
+       <label for="name">Name</label>
+       <input type="text"  name="name" value="{{model.selected.attributes.name}}" class="form-control" placeholder="name">
+       <select name="annot" class="select btn">
+			<option value=""></option>
+{{#selection}}
+			<option value="{{id}}" {{selected}}>{{name}}</option>
+{{/selection}}
+	</select>
+       <button class="btn btn-default button" name="addsub">+</button>
+       <button class="btn btn-default button" value="{{model.selected.id}}" name="delsub">x</button>
+    </div>
+     <label for="description">Description</label>
+     <textarea name="description" class="form-control" rows='3' placeholder="description">{{selected_description}}</textarea>
+      <label for="action_log">Log</label>
+      <div name="action_log">
+{{#selected_log}} 
+<div>{{date}} - {{user}} - {{message}}</div>
+
+{{/selected_log}} 
+
+      </div>
+     
+   </div>
+{{#debug}}
+   <button class="btn btn-default button" name="echo">echo</button>
+   {{time}}
+{{/debug}}
+   <div class='push-to-bottom'>
+     <button class="btn btn-primary button" name="save">save</button>
+     <button class="btn btn-primary button" name="append">append</button>
+     <button class="btn btn-default button" name="export">export</button>
+  </div>
+ </div>
+</div>
